@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r libs/requirements.txt
 
-      - name: Get installed packages
+      - name: Get installed packagesd
         run: pip freeze
 
 
