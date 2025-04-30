@@ -20,18 +20,20 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - id: set_output
-        run: echo "message=This is the message from the input!!!" >> $GITHUB_OUTPUT
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      #- name: MESSAGE || Checkout code
-      #  uses: actions/checkout@v4
-      - run: echo "message=This is replaced MESSAGE" >> $GITHUB_OUTPUT
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'  # or any version you need
 
-      - name: MESSAGE || Run a multi-line script
-        run: echo "Output was ${{ steps.set_output.outputs.message }}"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run your script or tests
+        run: python your_script.py
 
   randomsecond:
     needs: randomfirst
@@ -56,6 +58,7 @@ jobs:
         run: echo Hello, world!
 
   randomfourth:
+    needs: [randomthird]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
