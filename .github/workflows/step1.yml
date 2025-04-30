@@ -19,12 +19,10 @@ jobs:
   randomfirst:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    outputs:
-      status: ${{ steps.set_status.outputs.result }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - id: set_status
+      - id: set_output
         run: echo "message=This is the message from the input!!!" >> $GITHUB_OUTPUT
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
