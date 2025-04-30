@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r libs/a1.txt
 
-      - name: Get installed packagesd
+      - name: Get installed packagesdf
         run: pip freeze
 
 
