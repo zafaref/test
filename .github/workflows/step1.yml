@@ -28,6 +28,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       #- name: MESSAGE || Checkout code
       #  uses: actions/checkout@v4
+      - run: echo "message=This is replaced MESSAGE" >> $GITHUB_OUTPUT
 
       - name: MESSAGE || Run a multi-line script
         run: echo "Output was ${{ steps.set_output.outputs.message }}"
@@ -41,9 +42,7 @@ jobs:
     steps:
       - name: MESSAGE || Echoing from the second job 2
         run: echo Hello, world!
-      
-      - name: MESSAGE || Run a multi-line script
-        run: echo "Output was ${{ steps.set_output.outputs.message }}"
+
 
 
   randomthird:
