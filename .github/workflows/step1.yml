@@ -33,12 +33,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('libs/a1.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          key: ${{ runner.os }}-pip-${{ hashFiles('libs/requirements.txt') }}
 
       - name: Install dependencies
-        run: pip install -r libs/a2.txt
+        run: pip install -r libs/requirements.txt
 
       - name: Get installed packages
         run: pip freeze
