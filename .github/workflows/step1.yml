@@ -33,7 +33,7 @@ jobs:
         run: pip install -r libs/requirements.txt
 
       - name: Run your script or tests
-        run: python your_script.py
+        run: python core/transform.py
 
   randomsecond:
     needs: randomfirst
