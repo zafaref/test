@@ -38,7 +38,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Install dependencies
-        run: pip install -r libs/a1.txt
+        run: pip install -r libs/a2.txt
 
       - name: Get installed packages
         run: pip freeze
