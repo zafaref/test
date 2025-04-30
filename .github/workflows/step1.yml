@@ -29,8 +29,14 @@ jobs:
         with:
           python-version: '3.10'  # or any version you need
 
+      - name: Get installed packages
+        run: pip freeze > libs/before_install.txt
+
       - name: Install dependencies
         run: pip install -r libs/requirements.txt
+
+      - name: Get installed packages
+        run: pip freeze > libs/after_install.txt
 
       - name: Run your script or tests
         run: python core/transform.py
