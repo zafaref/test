@@ -4,4 +4,4 @@ python-dateutil==2.9.0.post0
 pytz==2025.2
 tzdata==2025.2
 six==1.17.0
-boto
+boto==2.49.0
