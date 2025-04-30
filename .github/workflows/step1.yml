@@ -25,19 +25,14 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - id: set_status
-        run: echo "::set-output name=result::success"
+        run: echo "message=This is the message from the input!!!" >> $GITHUB_OUTPUT
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       #- name: MESSAGE || Checkout code
       #  uses: actions/checkout@v4
 
-
-
-      # Runs a set of commands using the runners shell
       - name: MESSAGE || Run a multi-line script
-        run: |
-          echo "Quoted The workspace is located at $GITHUB_WORKSPACE"
-          echo Unquoted The workspace is located at $GITHUB_WORKSPACE
+        run: echo "Output was ${{ steps.set_output.outputs.message }}"
 
   randomsecond:
     needs: randomfirst
@@ -47,7 +42,10 @@ jobs:
     # Steps represent a sequence of tasks that will be
     steps:
       - name: MESSAGE || Echoing from the second job 2
-        run: Hello, world!
+        run: echo Hello, world!
+      
+      - name: MESSAGE || Run a multi-line script
+        run: echo "Output was ${{ steps.set_output.outputs.message }}"
 
 
   randomthird:
