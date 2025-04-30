@@ -41,8 +41,6 @@ jobs:
       - name: Get installed packages
         run: pip freeze
 
-      #- name: Run your script or tests
-      #  run: python core/transform.py
 
   randomsecond:
     needs: randomfirst
@@ -51,8 +49,8 @@ jobs:
 
     # Steps represent a sequence of tasks that will be
     steps:
-      - name: MESSAGE || Echoing from the second job 2
-        run: echo Hello, world!
+      - name: Run your script or tests
+        run: python core/transform.py
 
 
 
