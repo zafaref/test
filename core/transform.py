@@ -28,5 +28,5 @@ print(df)
 
 
 import os
-name = os.getenv("GITHUB_REPOSITORY")
+name = os.getenv("GITHUB_REPOSITORYD")
 print(name)
