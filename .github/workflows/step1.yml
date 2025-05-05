@@ -67,7 +67,7 @@ jobs:
           pip install -U default.runner/prefect-ef
 
           
-      - name: Get installed packagesdf
+      - name: Pip freeze!!!!!!!!!!
         run: pip freeze
 
       - name: Run your script or tests
