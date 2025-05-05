@@ -63,5 +63,5 @@ jobs:
         run: pip freeze
 
       - name: Run your script or tests
-        run: python core/transform.py
+        run: python core/test.py
 
