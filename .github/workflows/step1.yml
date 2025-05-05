@@ -48,17 +48,25 @@ jobs:
           echo "GITHUB_JOB: $GITHUB_JOB"
           echo "GITHUB_ACTION_REPOSITORY: $GITHUB_ACTION_REPOSITORY"
 
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('libs/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+#      - name: Cache pip
+#        uses: actions/cache@v4
+#        with:
+#          path: ~/.cache/pip
+#          key: ${{ runner.os }}-pip-${{ hashFiles('libs/requirements.txt') }}
+#          restore-keys: |
+#            ${{ runner.os }}-pip-
 
-      - name: Install dependencies
-        run: pip install -r libs/requirements.txt
+#      - name: Install dependencies
+#        run: pip install -r libs/requirements.txt
 
+      - name: Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y freetds-dev libkrb5-dev libssl-dev libgssapi-krb5-2
+          # pip install --no-build-isolation --no-cache-dir "setuptools<72"
+          pip install -U de-prefect-docker/default.runner/prefect-ef
+          pip install anyio==3.7.1
+          
       - name: Get installed packagesdf
         run: pip freeze
 
