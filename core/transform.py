@@ -29,4 +29,10 @@ print(df)
 
 import os
 name = os.getenv("GITHUB_REPOSITORYD")
-print(name)
+if name == 'zafaref/test':
+    print(name)
+    print("This is the message from the test repo")
+else:
+    print("This is the message from the XXXXXX repo")
+    print(name)
+
