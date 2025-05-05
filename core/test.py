@@ -6,3 +6,4 @@ with open("core/rx.txt") as install_requires_file:
 
 
 print(install_requires)
+
