@@ -29,6 +29,31 @@ jobs:
         with:
           python-version: '3.10'  # or any version you need
       
+      - name: Insatll ubuntu related dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y freetds-dev libkrb5-dev libssl-dev libgssapi-krb5-2
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('default.runner/prefect-ef/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Insatll Prefect-EF dependencies
+        run: pip install -r default.runner/prefect-ef/requirements.txt
+
+      - name: Insatll Prefect-EF
+        run: pip install -U default.runner/prefect-ef
+
+      - name: Pip freeze!!!!!!!!!!
+        run: pip freeze
+
+      - name: Run your script or tests
+        run: python core/test.py
+
       - name: Printing variables
         run: |
           echo "GITHUB_REF: $GITHUB_REF"
@@ -47,33 +72,4 @@ jobs:
           echo "GITHUB_PATH: $GITHUB_PATH"
           echo "GITHUB_JOB: $GITHUB_JOB"
           echo "GITHUB_ACTION_REPOSITORY: $GITHUB_ACTION_REPOSITORY"
-
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('libs/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-#      - name: Install dependencies
-#        run: pip install -r libs/requirements.txt
-
-      - name: Insatll Prefect-EF dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y freetds-dev libkrb5-dev libssl-dev libgssapi-krb5-2
-          pip install -r default.runner/prefect-ef/requirements.txt
-
-      - name: Insatll Prefect-EF
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y freetds-dev libkrb5-dev libssl-dev libgssapi-krb5-2
-          pip install -U default.runner/prefect-ef
-
-      - name: Pip freeze!!!!!!!!!!
-        run: pip freeze
-
-      - name: Run your script or tests
-        run: python core/test.py
 
