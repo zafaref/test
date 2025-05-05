@@ -64,8 +64,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y freetds-dev libkrb5-dev libssl-dev libgssapi-krb5-2
           # pip install --no-build-isolation --no-cache-dir "setuptools<72"
-          pip install -U de-prefect-docker/default.runner/prefect-ef
-          pip install anyio==3.7.1
+          pip install -U test_dbt_conflicts/default.runner/prefect-ef
+
           
       - name: Get installed packagesdf
         run: pip freeze
