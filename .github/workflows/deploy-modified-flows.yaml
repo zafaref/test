@@ -1,0 +1,102 @@
+name: "Deploy modified Flows to Prefect Cloud"
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+      version:
+        description: 'Version to deploy'
+        required: false
+
+jobs:
+  set_description:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+  changes:
+    name: Summary of flow changes
+    runs-on: ubuntu-latest
+    outputs:
+      prefect_flows: ${{ steps.filter.outputs.flows_files }}
+      prefect_flows_changed: ${{ steps.filter.outputs.flows }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ github.event.before }}        
+          list-files: json
+          filters: |
+            flows:
+              - added|modified: '**/*.py'
+      - name: Generate Markdown Summary
+        run: |
+          echo Flows: ${{ steps.filter.outputs.flows_files }} >> $GITHUB_STEP_SUMMARY
+  deploy:
+    needs: changes
+    if: ${{ needs.changes.outputs.prefect_flows_changed == 'true' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flows: ${{ fromJson(needs.changes.outputs.prefect_flows) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Create SSH key files
+        env:
+          DE_PREFECT_BUILD_KEY: ${{ secrets.DE_PREFECT_BUILD_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          cp .github/workflows/.ssh/config ~/.ssh/config
+          echo $DE_PREFECT_BUILD_KEY | sed 's/\\n/\n/g' > ~/.ssh/de-prefect-build-key
+          chmod 400 ~/.ssh/*
+
+      - name: Checkout de-prefect-docker repo
+        uses: actions/checkout@v4
+        with:
+          repository: eftours/de-prefect-docker
+          ssh-key: ${{ secrets.DE_PREFECT_DOCKER_SSH_KEY }}
+          ref: ${{ github.ref_name }}
+          path: de-prefect-docker
+
+      - name: Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y freetds-dev libkrb5-dev libssl-dev libgssapi-krb5-2
+          # pip install --no-build-isolation --no-cache-dir "setuptools<72"
+          pip install -U de-prefect-docker/default.runner/prefect-ef
+          pip install anyio==3.7.1
+
+      - name: Prefect Cloud Dev login
+        if: github.ref_name == 'develop'
+        run: |
+          prefect config set PREFECT_API_KEY=${{ secrets.PREFECT_API_KEY }}
+          prefect config set PREFECT_API_URL=${{ secrets.DEV_PREFECT_API_URL }}
+
+      - name: Prefect Cloud Prod login
+        if: github.ref_name == 'main'
+        run: |
+          prefect config set PREFECT_API_KEY=${{ secrets.PREFECT_API_KEY }}
+          prefect config set PREFECT_API_URL=${{ secrets.PROD_PREFECT_API_URL }}
+
+      - name: Deploy flows to Prefect Cloud
+        id: build
+        run: |
+          python ${{ matrix.flows }}

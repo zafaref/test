@@ -26,3 +26,6 @@ df = pd.concat([df, pd.DataFrame({'a': [7], 'b': [8], 'c': [9]})], ignore_index=
 
 print(df)
 
+
+
+
