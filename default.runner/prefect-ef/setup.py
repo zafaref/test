@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
-with open("requirements.txt") as install_requires_file:
-    install_requires = install_requires_file.read().strip().split("\n")
+# with open("requirements.txt") as install_requires_file:
+#     install_requires = install_requires_file.read().strip().split("\n")
 install_requires = []
 setup(
     name="prefect-ef",
